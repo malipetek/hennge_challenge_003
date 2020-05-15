@@ -1,7 +1,10 @@
 {
   "name": "svelte-app",
   "version": "1.0.0",
-  "scripts": {
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malipetek/hennge_challenge_003.git"
+  },  "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public"
