@@ -78,7 +78,7 @@
         </div>
       {/each}
   </div>
-{#if config.isRangePicker}
+{#if config.dualSelector}
   <div class="heading-section">
     <div class="control" 
       class:enabled={canDecrementSecMonth}

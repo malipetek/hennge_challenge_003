@@ -12,7 +12,8 @@
   const today = new Date();
 
   export let rangePicker = false;
-  export let format = '#{m}/#{d}/#{Y}';
+  export let dualSelector = false;
+  export let format = '#{Y}/#{m}/#{d}';
   export let start = new Date(1987, 9, 29);
   export let end = new Date(2020, 9, 29);
   export let selected = today;
@@ -24,7 +25,8 @@
   export let weekStart = 0;
 
   const config = {
-    isRangePicker: rangePicker
+    isRangePicker: rangePicker,
+    dualSelector: dualSelector
   };
 
   setContext(contextKey, {
@@ -108,6 +110,7 @@
     formattedSelected = isFn ? format(selected) : formatDate(selected, format);
     if (config.isRangePicker) {
       formattedSelectedEnd = isFn ? format(selectedEnd) : formatDate(selectedEnd, format);
+      dispatch('rangeSelected', {});
     }
 
     formattedCombined = rangePicker ? `${formattedSelected} - ${formattedSelectedEnd}` : formattedSelected;
@@ -333,7 +336,7 @@
   @media (min-width: 600px) {
     .calendar {
       height: auto;
-      width: 680px;
+      width: 340px;
       max-width: 100%;
     }
   }

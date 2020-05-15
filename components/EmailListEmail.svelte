@@ -9,10 +9,10 @@
         border-width: 0 0 1px 0;
         
         grid-template-areas: 
-            "from from from date"
-            "to to to ."
-            "subject subject subject subject";
-        grid-template-columns: 2fr 2fr 2fr min-content;
+            "icon from from from attachment date"
+            "icon to to to to cc"
+            "subject subject subject subject subject subject";
+        grid-template-columns: 20px 2fr 2fr 2fr min-content;
         grid-gap: 3px;
     }
     
@@ -42,12 +42,29 @@
     .header>*:last-child:after{
         content: '';
     }
+    .header .icon-mail {
+        display: none;
+    }
+    .attachment{
+        grid-area: attachment;
+    }
+    .attachment>img {
+        width: 12px;
+    }
+    .icon-mail {
+        grid-area: icon;
+        overflow: visible;
+    }
+    .icon-mail>img{
+        width: 12px;
+    }
     .from {
         grid-area: from;
         font-weight: bold;
     }
     .to {
         grid-area: to;
+        position: relative;
     }
     .subject {
         grid-area: subject;
@@ -55,6 +72,17 @@
     }
     .date {
         grid-area: date;
+    }
+    .cc {
+        grid-area: cc;
+    }
+    .span-cc{
+        display: inline-block;
+        background-color: #888;
+        color: #fff;
+        padding: 3px 5px;
+        border-radius: 4px;
+        float: right;
     }
     @media (min-width: 640px) {
          .email{
@@ -65,13 +93,16 @@
             border-width: 0 0 1px 0;
             
             display: grid;
-            grid-template-areas: "from to subject date";
-            grid-template-columns: 3fr 4fr 12fr 2fr;
+            grid-template-areas: "from to cc subject attachment date";
+            grid-template-columns: 3fr 4fr 1fr 12fr 30px 2fr;
         }
         .header {
             display: grid;
         }
         .header>*:after{
+            display: none;
+        }
+        .icon-mail {
             display: none;
         }
         .from {
@@ -91,20 +122,34 @@
         }
     }
 </style>
-<div class="email {!email ? 'header' : ''}">
+<div class="email {!email ? 'header' : ''}" in:fly={{ x: -50, duration: 300 }} out:fly={{ x: 50, duration: 300 }}>
+    <div class="icon-mail">
+        <img src="assets/icon_mail_sp.svg" alt="mail icon">
+    </div>
     <div class="from">
         {#if !email} <b> From </b> {:else} {email.from} {/if}
     </div>
     <div class="to">
         {#if !email} <b> To </b> {:else} {email.to} {/if}
     </div>
+    <div class="cc">
+        {#if email}
+            {#if email.cc.length} <span class="span-cc">+{email.cc.length}</span>{/if} 
+        {/if}
+    </div>
     <div class="subject">
         {#if !email} <b> Subject </b> {:else} {email.title} {/if}
     </div>
+    {#if email && email.attachment.length}
+    <div class="attachment">
+        <img src="assets/icon_clip.svg" alt="attachment icon">
+    </div>
+    {/if}
     <div class="date">
         {#if !email} <b> Date </b> {:else} {email.date} {/if}
     </div>
 </div>
 <script>
 export let email;
+import { fly } from 'svelte/transition';
 </script>

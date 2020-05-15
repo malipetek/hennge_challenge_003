@@ -44,7 +44,7 @@
       />
     {/each}
   </div>
-  {#if config.isRangePicker}
+  {#if config.dualSelector}
   <div class="second-month-container">
     <div class="legend">
       <div class="second-month-week">

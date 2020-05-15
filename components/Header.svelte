@@ -31,7 +31,17 @@
 
 <header>
   <div class="datepicker-container">
-    <Datepicker buttonBorderColor="#E0E0E0" rangePicker start={mindate} end={maxdate} />
+    <Datepicker 
+      on:rangeSelected 
+      bind:dateChosenStart={dateChosenStart} 
+      bind:dateChosenEnd={dateChosenEnd} 
+      bind:formattedSelected={formattedSelected} 
+      bind:formattedSelectedEnd={formattedSelectedEnd} 
+      buttonBorderColor="#E0E0E0" 
+      rangePicker
+      start={mindate}
+      end={maxdate}
+      />
   </div>
   <div />
 </header>
@@ -44,9 +54,23 @@
   </span>
 </div>
 <script>
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+  
   export let emails;
   export let date;
   export let user;
+  export let formattedSelected;
+  export let formattedSelectedEnd;
+
+  export let dateChosenStart;
+  export let dateChosenEnd;
+  
+  let dateSelectedCallback = () => {
+    dispatch('rangeSelected', {formattedSelected, formattedSelectedEnd});
+  };
+
   const dayAsMs = 864e5;
   const allowedArchiveCallback = 90 * dayAsMs; // 90 days
   import Datepicker from "./svelte-calendar/Datepicker.svelte";
