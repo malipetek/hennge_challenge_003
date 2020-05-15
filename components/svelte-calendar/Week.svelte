@@ -26,7 +26,7 @@
     {#if selectedEnd}
       <div 
         class="day"
-        class:is-range-picker={config.dualSelector}
+        class:is-range-picker={config.isRangePicker}
         class:outside-month={!day.partOfMonth}
         class:first-of-month={day.firstOfMonth}
         class:last-of-month={day.lastOfMonth}
@@ -55,7 +55,7 @@
       <div 
         class="day" 
         class:outside-month={!day.partOfMonth}
-        class:is-range-picker={config.dualSelector}
+        class:is-range-picker={config.isRangePicker}
         class:selected={areDatesEquivalent(day.date, selected)}
         class:is-today={day.isToday}
         class:is-disabled={!day.selectable}
