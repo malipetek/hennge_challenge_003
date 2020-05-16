@@ -39,8 +39,8 @@
       bind:formattedSelectedEnd={formattedSelectedEnd} 
       buttonBorderColor="#E0E0E0" 
       rangePicker
-      start={mindate}
-      end={maxdate}
+      start={minDate}
+      end={maxDate}
       />
   </div>
   <div />
@@ -71,12 +71,8 @@
     dispatch('rangeSelected', {formattedSelected, formattedSelectedEnd});
   };
 
-  const dayAsMs = 864e5;
-  const allowedArchiveCallback = 90 * dayAsMs; // 90 days
   import Datepicker from "./svelte-calendar/Datepicker.svelte";
-
-  let mindate = new Date();
-  mindate.setTime(new Date().getTime() - allowedArchiveCallback);
-  let maxdate = new Date();
+  export let minDate;
+  export let maxDate;
 
 </script>

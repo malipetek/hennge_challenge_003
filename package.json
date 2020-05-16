@@ -4,7 +4,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/malipetek/hennge_challenge_003.git"
-  },  "scripts": {
+  },
+  "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
     "start": "sirv public"
@@ -20,6 +21,7 @@
   },
   "dependencies": {
     "dateutils": "^0.5.1",
+    "moment": "^2.25.3",
     "sirv-cli": "^0.4.4",
     "timeUtils": "^2.0.0"
   }

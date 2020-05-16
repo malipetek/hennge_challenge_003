@@ -14,6 +14,11 @@
             "subject subject subject subject subject subject";
         grid-template-columns: 20px 2fr 2fr 2fr min-content;
         grid-gap: 3px;
+
+        transition: box-shadow .3s ease-in-out;
+    }
+    .clickable{
+        cursor: pointer;
     }
     
     .email>* {
@@ -33,6 +38,17 @@
     }
     .header .subject {
         font-size: .8em;
+    }
+    .header .from img {
+        width: 10px;
+        transform: rotateY(0deg);
+    }
+    .header .from span{
+        display: inline-block;
+        transform: rotateZ(0deg);
+    }
+    .header .from {
+        overflow: visible;
     }
     .header>*:after{
         content: '|';
@@ -84,6 +100,29 @@
         border-radius: 4px;
         float: right;
     }
+
+    .open {
+        background-color: #B3E5FC!important;
+    }
+    .email-content {
+        box-shadow: 3px 3px 7px 5px #00000020;
+    }
+    
+    .email-content {
+        padding: 1em;
+        border-style: solid;
+        border-color: #ccc;
+        border-width: 0 0 1px 0;
+    }
+    .email-body, .email-content {
+        text-align: left;
+        text-transform: capitalize;     
+    }
+
+    .flipY {
+        transform: rotateZ(180deg)!important;
+    }
+
     @media (min-width: 640px) {
          .email{
             width: 100%;
@@ -101,6 +140,15 @@
         }
         .header>*:after{
             display: none;
+        }
+
+         .header .date img {
+        width: 10px;
+        transform: rotateY(0deg);
+        }
+        .header .date span{
+            display: inline-block;
+            transform: rotateZ(0deg);
         }
         .icon-mail {
             display: none;
@@ -122,12 +170,32 @@
         }
     }
 </style>
-<div class="email {!email ? 'header' : ''}" in:fly={{ x: -50, duration: 300 }} out:fly={{ x: 50, duration: 300 }}>
+<div class="email"
+    class:header={!email}
+    class:clickable={email}
+    class:open={open}
+    in:fly={{ x: -50, duration: 300 }} 
+    out:fly={{ x: 50, duration: 300 }}
+    on:click="{() => email ? open = !open : !1}"
+    >
     <div class="icon-mail">
         <img src="assets/icon_mail_sp.svg" alt="mail icon">
     </div>
     <div class="from">
-        {#if !email} <b> From </b> {:else} {email.from} {/if}
+        {#if !email} 
+        <b 
+            on:click={() => isMobile ? changeSort() : ''}
+            class:clickable={isMobile}
+            > From 
+            {#if isMobile } 
+                <span class:flipY={sortAscending}>
+                    <img src="assets/icon_arrow01.svg" />
+                </span>
+            {/if}
+        </b> 
+        {:else}
+            {email.from}
+        {/if}
     </div>
     <div class="to">
         {#if !email} <b> To </b> {:else} {email.to} {/if}
@@ -146,10 +214,67 @@
     </div>
     {/if}
     <div class="date">
-        {#if !email} <b> Date </b> {:else} {email.date} {/if}
+        {#if !email} 
+        <b 
+            on:click={() => !isMobile ? changeSort() : ''}
+            class:clickable={!isMobile}
+            > Date
+            {#if !isMobile } 
+                <span class:flipY={sortAscending}>
+                    <img src="assets/icon_arrow01.svg" />
+                </span>
+            {/if}
+        </b> {:else} {dateFormatted} {/if}
     </div>
 </div>
+<div>
+{#if open}
+<div class="email-content"
+    transition:slide
+    >
+    <div class="email-description">
+        <p><b> From: </b> {email.from}</p>
+        <p><b> To: </b> {email.to}</p>
+        {#if email.cc && email.cc.length}<p><b> Cc: </b> {email.cc.join(', ')}</p>{/if}
+        {#if email.attachment && email.attachment.length }<p><b> Attachments: </b> {email.attachment}</p>{/if}
+    </div>
+    <p class="email-body">
+        { email.body }
+    </p>
+</div>
+{/if}
+</div>
+<svelte:window bind:innerWidth={width}/>
 <script>
+export let open = false;
 export let email;
-import { fly } from 'svelte/transition';
+export let sortAscending;
+
+import { fly, slide, fade } from 'svelte/transition';
+import { createEventDispatcher } from 'svelte';
+
+const dispatch = createEventDispatcher();
+
+let width;
+$: isMobile = width < 640;
+
+const changeSort = () => {
+    sortAscending = !sortAscending;
+    dispatch('sortChanged');
+    }
+
+import moment from 'moment';
+let dateFormatted;
+
+
+$: if(email && email.date) {
+    dateFormatted = moment(email.date).calendar(null, {
+                                                    sameDay: 'LT',
+                                                    lastDay: 'MMMM DD',
+                                                    lastWeek: 'MMMM DD',
+                                                    lastMonth: 'DD MM',
+                                                    sameElse: 'DD/MM/YYYY'
+                                                });
+    //dateFormatted = dateFormatted.hours() < 24 ? dateFormatted.hours() : dateFormatted;
+}
 </script>

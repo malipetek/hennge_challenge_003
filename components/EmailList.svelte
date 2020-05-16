@@ -25,9 +25,10 @@ main>* {
 <div class="main">
     <div class="list {emails.length ? '' : 'vertical-center'}">
         {#if emails.length} 
-            <EmailListEmail /> 
+            <EmailListEmail bind:sortAscending on:sortChanged />
         {/if}
-        {#each emails as email }
+        {#each emails as email, i }
+            
             <EmailListEmail {email} />
         {:else}
             <img src="assets/logo.png" alt="">
@@ -38,4 +39,5 @@ main>* {
 <script>
     import EmailListEmail from './EmailListEmail.svelte';
     export let emails = [];
+    export let sortAscending;
 </script>
