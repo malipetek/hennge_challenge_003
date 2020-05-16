@@ -1,5 +1,5 @@
 # Coding challenge 003 with Svelte 3
-
+![email_app](/assets/email_app.gif)
 Applicant: [Muhammet Ali Petek](mailto:malipetek@gmail.com)
 
 Open terminal and run `npm run dev` to start the app.
